@@ -1,0 +1,25 @@
+version: "3.9"
+
+volumes: 
+  appeal_db_volume:
+
+services:
+  appeal_app:
+    container_name: appeal_app
+    restart: always
+    build: ./
+    ports: 
+      - "8080:8080"
+    links: 
+      - appeal_db
+    environment:
+      - PORT=8080
+      - DATABASE_URL=mongodb://appeal_db:27017/appeal_app
+
+  appeal_db:
+    container_name: appeal_db
+    image: mongo:latest
+    volumes: 
+      - "appeal_db_volume:/data/db"
+    ports: 
+      - "27017:27017"

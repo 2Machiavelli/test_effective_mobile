@@ -54,20 +54,21 @@ class AppealController {
 
   async getAppeals(req, res) {
     try {
-      let appeals: Appeal[];
       const { startDate, endDate, date } = req.body;
 
       if (date) {
-        appeals = await appealService.findByDateRange(date, date);
+        const appeals = await appealService.findByDateRange(date, date);
+        res.status(200).json(appeals);
+        return;
       }
 
       if (startDate && endDate) {
-        appeals = await appealService.findByDateRange(startDate, endDate);
+        const appeals = await appealService.findByDateRange(startDate, endDate);
+        res.status(200).json(appeals);
+        return;
       }
 
-      if (!startDate && !endDate && !date) {
-        appeals = await appealService.getAll();
-      }
+      const appeals = await appealService.getAll();
       res.status(200).json(appeals);
     } catch (error) {
       res.status(500).json({ message: error.message });
